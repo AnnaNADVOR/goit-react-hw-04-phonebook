@@ -72,7 +72,7 @@ export default function App() {
           <>
             <Filter value={filter} onChange={changeFilter} />
           {visibleContacts.length === 0 ? (
-            <Notification message={`Contact's name ${filter} not found.`}/>):
+            <Notification message={`Contact's name "${filter}" not found.`}/>):
               (<ContactList contacts={visibleContacts} onDeleteContact={deleteContact} />)}
           </>
           ) :
