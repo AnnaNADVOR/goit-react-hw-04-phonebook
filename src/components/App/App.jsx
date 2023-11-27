@@ -26,30 +26,13 @@ export default function App() {
   useEffect(() => {
     console.log("useEffect")
     window.localStorage.setItem("contacts", JSON.stringify(contacts));
-
   }, [contacts]);
 
-  // const getVisibleContacts = () => {
-  //   const normalizeFilter = filter.toLocaleLowerCase();
-  //   return contacts.filter(contact => contact.name.toLowerCase().includes(normalizeFilter));
-  // }
-
-  // const visibleContacts = getVisibleContacts()
-  const changeFilter = () => {
-
-  }
-
-  const deleteContact = (id) => {
-    setContacts(prevContacts => {
-      return prevContacts.filter(contact => contact.id !== id)
-    })    
-  }
-  
   function addContact (name, number) {
     const contact = {
       name,
       number,
-  }
+    }
 
    if (contacts.find(prevContact => prevContact.name.toLowerCase() === contact.name.toLowerCase())) {
       Report.info(
@@ -63,6 +46,24 @@ export default function App() {
     setContacts(prevContacts => [...prevContacts, {id: nanoid(), ...contact}]);
   }
 
+  const deleteContact = (id) => {
+    setContacts(prevContacts => {
+      return prevContacts.filter(contact => contact.id !== id)
+    })    
+  }
+  
+  function changeFilter (event) {
+    setFilter(event.currentTarget.value.trim());
+  }
+
+  const getVisibleContacts = () => {
+    const normalizeFilter = filter.toLocaleLowerCase();
+    const findContacts = contacts.filter(contact => contact.name.toLowerCase().includes(normalizeFilter));
+    return findContacts;
+  }
+
+  const visibleContacts = getVisibleContacts(); 
+
   return (
     <Container>
        <MainTitle>Phone<Titleparth>Book</Titleparth></MainTitle>
@@ -71,7 +72,9 @@ export default function App() {
         {contacts.length > 0 ? (
           <>
             <Filter value={filter} onChange={changeFilter} />
-            <ContactList contacts={contacts} onDeleteContact={deleteContact}/>
+          {visibleContacts.length === 0 ? (
+            <Notification message={`No contacts found with name ${filter}.`}/>):
+              (<ContactList contacts={visibleContacts} onDeleteContact={deleteContact} />)}
           </>
           ) :
           (<Notification message="There is no contacts"/>)
