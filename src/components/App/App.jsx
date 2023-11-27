@@ -36,7 +36,7 @@ export default function App() {
    if (contacts.find(prevContact => prevContact.name.toLowerCase() === contact.name.toLowerCase())) {
       Report.info(
         "Enter a unique name!",
-        `This contact's name ${contact.name} already exists.`,
+        `Contact's name "${contact.name}" already exists.`,
         "OK"
       )
       return;
